@@ -14,12 +14,12 @@ function Login() {
     const login= async(data)=>{
         setError('')
         try {
-            const { session, jwt } = await authservice.login(data);
+            const session = await authservice.login(data);
         if(session){
             // authservice.client.setJWT(jwt);
+            navigate('/')
             const userData= await authservice.getCurrentUser();
             if (userData) dispatch(storeLogin(userData))
-            navigate('/')
         }
         } catch (error) {
             setError(error.message)

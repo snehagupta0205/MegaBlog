@@ -24,22 +24,19 @@ export class Authservice {
             throw error;
         }
     }
-    async login({email,password}){
-        try{
-            const session= await this.account.createEmailPasswordSession(email,password);
-             // 2️⃣ now that you have a session, get a JWT
-            const { jwt } = await this.account.createJWT();
+        async login({ email, password }) {
+        try {
+            // create a session → Appwrite automatically stores it in cookies
+            const session = await this.account.createEmailPasswordSession(email, password);
+            console.log("✅ Logged in successfully:", session);
 
-            // 3️⃣ configure the SDK to use that JWT on every call
-            this.client.setJWT(jwt);
-            console.log("🔑 JWT set on client:", jwt);
-            // 4️⃣ finally return something useful (session, jwt, or both)
-            return { session, jwt };
-        }
-        catch (error) {
+            // you don't need to manually create or set JWT on the client
+            return session;
+        } catch (error) {
+            console.error("Login error:", error);
             throw error;
         }
-    }
+        }
     async getCurrentUser(){
         try {
             return await this.account.get();
